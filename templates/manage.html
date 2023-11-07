@@ -108,11 +108,12 @@
         <label for="course">Course and Year:</label>
         <input type="text" id="course" name="course" required><br>
 
-        <button type="submit">Submit</button>
+        <button type="submit" onclick="submitForm()">Submit</button>
         <button type="button" id="cancelFormBtn">Cancel</button>
       </form>
     </div>
   </div>
+  <!--
 <form id="registrationForm">
     <h2>Register Student</h2>
     <label for="studentid">Student ID:</label>
@@ -129,6 +130,8 @@
 
     <button type="button" onclick="submitForm()">Register</button>
 </form>
+  -->
+
 
 <table>
     <thead>
@@ -136,6 +139,10 @@
             <th>Student ID</th>
             <th>Name</th>
             <th>Course and Year</th>
+           <!--
+            <th>Time Left</th>
+            <th>Time Consumed</th>
+           --> 
         </tr>
     </thead>
     <tbody id="studentTableBody">
@@ -145,12 +152,12 @@
 
 <script>
     function toggleForm() {
-        var form = document.getElementById("registrationForm");
+        var form = document.getElementById("formContainer");
         form.style.display = (form.style.display === "none") ? "block" : "none";
     }
 
     function submitForm() {
-        // Add your form submission logic here
+        // Get the form element
         alert("Form submitted!");
 
         // Dummy data for demonstration
@@ -168,7 +175,11 @@
         cell1.innerHTML = studentId;
         cell2.innerHTML = name;
         cell3.innerHTML = course;
-    }
+
+        // Close the overlay
+        document.getElementById('overlay').style.display = 'none';
+}
+
 
     document.addEventListener('DOMContentLoaded', function () {
         const showFormBtn = document.getElementById('showFormBtn');
