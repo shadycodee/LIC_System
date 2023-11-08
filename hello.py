@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'records'
 
 mysql = MySQL(app)
@@ -33,19 +33,19 @@ def admin_login():
 @app.route('/manage', methods=['GET', 'POST'])
 def manage():
     if request.method == 'POST':
-        student_id = request.form['studentid']
+        studentid = request.form['studentid']
         name = request.form['name']
         password = request.form['password']
         course = request.form['course']
 
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO students (student_id, name, password, course) VALUES (%s, %s, %s, %s)",
-                    (student_id, name, password, course))
+        cur.execute("INSERT INTO students (studentid, name, password, course) VALUES (%s, %s, %s, %s)",
+                    (studentid, name, password, course))
         mysql.connection.commit()
         cur.close()
 
     cur = mysql.connection.cursor()
-    cur.execute("SELECT student_id, name, course FROM students")
+    cur.execute("SELECT studentid, name, course FROM students")
     students = cur.fetchall()
     cur.close()
 

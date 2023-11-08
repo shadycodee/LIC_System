@@ -12,13 +12,13 @@
             padding: 0;
         }
 
-        #addStudentContainer,
+        #showFormBtn,
         #logoutContainer {
             text-align: center;
             margin-top: 20px;
         }
 
-        .buttonLink {
+        #showFormBtn {
             display: inline-block;
             padding: 10px 20px;
             background-color: #333;
@@ -82,9 +82,6 @@
 </head>
 <body>
 
-<div id="addStudentContainer">
-    <a href="#" class="buttonLink" onclick="toggleForm()">Add Student</a>
-</div>
 
 <button id="showFormBtn">Register Student</button>
 
@@ -113,24 +110,6 @@
       </form>
     </div>
   </div>
-  <!--
-<form id="registrationForm">
-    <h2>Register Student</h2>
-    <label for="studentid">Student ID:</label>
-    <input type="text" id="studentid" name="studentid" required><br>
-
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required><br>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
-
-    <label for="course">Course and Year:</label>
-    <input type="text" id="course" name="course" required><br>
-
-    <button type="button" onclick="submitForm()">Register</button>
-</form>
-  -->
 
 
 <table>
@@ -139,14 +118,20 @@
             <th>Student ID</th>
             <th>Name</th>
             <th>Course and Year</th>
-           <!--
             <th>Time Left</th>
             <th>Time Consumed</th>
-           --> 
+           
         </tr>
     </thead>
     <tbody id="studentTableBody">
         <!-- Registered students will be displayed here -->
+        {% for student in students %}
+        <tr>
+            <td>{{ student[0] }}</td>
+            <td>{{ student[1] }}</td>
+            <td>{{ student[2] }}</td>
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
 
@@ -157,6 +142,8 @@
     }
 
     function submitForm() {
+
+        event.preventDefault();
         // Get the form element
         alert("Form submitted!");
 
