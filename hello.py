@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
+from flask import jsonify
 
 app = Flask(__name__)
 
@@ -43,6 +44,8 @@ def manage():
                     (studentid, name, password, course))
         mysql.connection.commit()
         cur.close()
+
+        return jsonify({"message": "Student registered successfully"})
 
     cur = mysql.connection.cursor()
     cur.execute("SELECT studentid, name, course FROM students")
