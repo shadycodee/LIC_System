@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
 from flask import jsonify
 
 app = Flask(__name__)
+
+# Set a secret key for the application when using 'flash'
+app.secret_key = 'qWer#123ty'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
@@ -20,12 +23,9 @@ def admin_login():
         username = request.form['uname']
         password = request.form['pass']
 
-        print("Entered Username: ", username)
-        print("Entered Password: ", password)
-
-        
 
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['authenticated'] = True
             return redirect(url_for('manage'))
         else:
             return render_template('admin_login.html', message='Invalid Credentials')
@@ -39,13 +39,19 @@ def manage():
         password = request.form['password']
         course = request.form['course']
 
+        
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO students (studentid, name, password, course) VALUES (%s, %s, %s, %s)",
                     (studentid, name, password, course))
         mysql.connection.commit()
         cur.close()
 
-        return jsonify({"message": "Student registered successfully"})
+        #return jsonify({"message": "Student registered successfully"})
+        # Use flash to store a message for the next request
+        flash("Student registered successfully")
+
+        # Redirect to the 'manage' route (GET) after successful registration
+        return redirect(url_for('manage'))
 
     cur = mysql.connection.cursor()
     cur.execute("SELECT studentid, name, course FROM students")
@@ -53,6 +59,7 @@ def manage():
     cur.close()
 
     return render_template('manage.html', students=students)
+
 
 @app.route('/login')
 def student_login():
