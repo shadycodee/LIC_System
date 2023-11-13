@@ -96,8 +96,8 @@
 </div>
 <div id="overlay">
     <div id="formContainer">
-      <button id="closeFormBtn">&times;</button>
-      <form>
+        <button id="closeFormBtn">&times;</button>
+        <form method="POST" onsubmit="submitForm()">
         <!-- Your form fields go here -->
         <label for="studentid">Student ID:</label>
         <input type="text" id="studentid" name="studentid" required><br>
@@ -110,6 +110,7 @@
 
         <label for="course">Course and Year:</label>
         <input type="text" id="course" name="course" required><br>
+        
 
         <button type="submit" onclick="submitForm()">Submit</button>
         
