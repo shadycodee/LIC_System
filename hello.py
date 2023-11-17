@@ -17,6 +17,12 @@ mysql = MySQL(app)
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin"
 
+# Define a list of routes that do not require authentication
+# You can add more routes if needed
+NO_AUTH_REQUIRED_ROUTES = ['admin_login', 'student_login']
+
+
+
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
@@ -30,6 +36,12 @@ def admin_login():
         else:
             return render_template('admin_login.html', message='Invalid Credentials')
     return render_template('admin_login.html')
+
+@app.route('/logout')
+def logout():
+    # Clear the user's session
+    session.pop('authenticated', None)
+    return redirect(url_for('admin_login'))
 
 @app.route('/manage', methods=['GET', 'POST'])
 def manage():
@@ -65,6 +77,16 @@ def manage():
 def student_login():
     return render_template('student_login.html')
 
+@app.before_request
+def require_auth():
+    # Check if the user is trying to access a route that does not require authentication
+    if request.endpoint in ['admin_login', 'student_login']:
+        return
+
+    # Check if the user is authenticated
+    if not session.get('authenticated'):
+        # If not authenticated, redirect to the admin login page
+        return redirect(url_for('admin_login'))
 
 
 if __name__ == '__main__':
