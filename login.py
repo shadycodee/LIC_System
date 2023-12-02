@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import mysql.connector
+from datetime import datetime, timedelta
 
 def check_login():
     student_id = entry_student_id.get()
@@ -33,6 +34,8 @@ def check_login():
 # Create the main window
 window = tk.Tk()
 window.attributes('-fullscreen', True)
+# Set the background color
+window.configure(bg="#F9F4D6")
 
 #window.title("Login System")
 
