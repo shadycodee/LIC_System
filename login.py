@@ -26,10 +26,27 @@ def check_login():
     db_connection.close()
 
     if result:
-        messagebox.showinfo("Login Successful", "Welcome, Student!")
+        window.destroy()
+        show_menu()
         # Add logic to open the main application window or perform other actions
     else:
         messagebox.showerror("Login Failed", "Invalid Student ID or Password")
+# Function to show the menu window
+def show_menu():
+    # Create the menu window
+    menu_window = tk.Tk()
+    menu_window.title("Menu")
+    
+    # Create menu widgets
+    label_menu = tk.Label(menu_window, text="Welcome to the Menu!")
+    button_logout = tk.Button(menu_window, text="Logout", command=menu_window.destroy)
+
+    # Place menu widgets on the window
+    label_menu.pack(padx=10, pady=10)
+    button_logout.pack(pady=10)
+
+    # Start the Tkinter event loop for the menu window
+    menu_window.mainloop()
 
 # Create the main window
 window = tk.Tk()
