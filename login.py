@@ -9,11 +9,15 @@ def check_login():
 
     # Replace the following with your MySQL connection details
     db_connection = mysql.connector.connect(
-        host="localhost",
+        host="192.168.1.15",
         user="root",
         password="",
         database="records"
     )
+#Allow any pc to connect to the database use this statement to the main pc where database is located
+#     GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'your_password' WITH GRANT OPTION;
+#     FLUSH PRIVILEGES;
+
 
     cursor = db_connection.cursor()
 
@@ -31,11 +35,18 @@ def check_login():
         # Add logic to open the main application window or perform other actions
     else:
         messagebox.showerror("Login Failed", "Invalid Student ID or Password")
+
+def on_close_menu(menu_window):
+    # Display a message asking the user to log out first
+    messagebox.showinfo("Logout Required", "Please log out before closing the menu.")
 # Function to show the menu window
 def show_menu():
     # Create the menu window
     menu_window = tk.Tk()
     menu_window.title("Menu")
+
+    # Override the close button behavior
+    menu_window.protocol("WM_DELETE_WINDOW", lambda: on_close_menu(menu_window))
     
     # Create menu widgets
     label_menu = tk.Label(menu_window, text="Welcome to the Menu!")
