@@ -9,7 +9,7 @@ def check_login():
 
     # Replace the following with your MySQL connection details
     db_connection = mysql.connector.connect(
-        host="192.168.1.15",
+        host="localhost",
         user="root",
         password="",
         database="records"
