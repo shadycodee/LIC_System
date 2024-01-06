@@ -14,6 +14,7 @@ app.config['MYSQL_DB'] = 'records'
 
 mysql = MySQL(app)
 
+#admin login credentials
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin"
 
@@ -80,7 +81,7 @@ def student_login():
 @app.before_request
 def require_auth():
     # Check if the user is trying to access a route that does not require authentication
-    if request.endpoint in ['admin_login', 'student_login']:
+    if request.endpoint in ['admin_login']:
         return
 
     # Check if the user is authenticated

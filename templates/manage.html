@@ -121,7 +121,7 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br>
 
-        <label for="course">Course and Year:</label>
+        <label for="course">Course:</label>
         <input type="text" id="course" name="course" required><br>
         
 
@@ -131,13 +131,15 @@
     </div>
   </div>
 
-
+  <input type="text" id="searchInput" placeholder="Search for student ID...">
+  <button onclick="searchRecord()">Search</button>
+  <button onclick="resetTable()">Reset Table</button>
 <table>
     <thead>
         <tr>
             <th>Student ID</th>
             <th>Name</th>
-            <th>Course and Year</th>
+            <th>Course</th>
             <th>Time Left</th>
             <th>Time Consumed</th>
            
@@ -145,7 +147,7 @@
     </thead>
     <tbody id="studentTableBody">
         <!-- Registered students will be displayed here -->
-        {% for student in students %}
+        {% for student in students[:5] %}
         <tr>
             <td>{{ student[0] }}</td>
             <td>{{ student[1] }}</td>
@@ -154,8 +156,80 @@
         {% endfor %}
     </tbody>
 </table>
+<button onclick="showTop(10)">Show Top 10</button>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
+    let startIndex = 0;  // Starting index for displayed records
+    let allStudents = [];  // Variable to store all students in the database
+
+    function showNext() {
+        const pageSize = 5;  // Number of records to display on each page
+
+        // Increment the startIndex to move to the next set of records
+        startIndex += pageSize;
+
+        // Fetch all students from the server and update the 'allStudents' variable
+        // You'll need to implement a Flask route to handle this request
+        // Example: /get_all_students
+        // For simplicity, let's assume the data is in JSON format
+        // Replace this with the actual endpoint and data fetching logic
+        fetch('/get_all_students')
+            .then(response => response.json())
+            .then(data => {
+                allStudents = data;
+
+                // Update the table with the next set of records
+                updateTable();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function updateTable() {
+        const pageSize = 5;  // Number of records to display on each page
+        const endIndex = startIndex + pageSize;
+        const slicedStudents = allStudents.slice(startIndex, endIndex);
+
+        const tbody = document.getElementById('studentTableBody');
+        tbody.innerHTML = '';
+
+        for (const student of slicedStudents) {
+            const row = `<tr>
+                            <td>${student[0]}</td>
+                            <td>${student[1]}</td>
+                            <td>${student[2]}</td>
+                        </tr>`;
+            tbody.innerHTML += row;
+        }
+    }
+    //search student ID
+    function searchRecord() {
+      var input = document.getElementById('searchInput').value.toLowerCase();
+      var table = document.getElementById('tableBody');
+      var rows = table.getElementsByTagName('tr');
+
+      for (var i = 0; i < rows.length; i++) {
+        var cells = rows[i].getElementsByTagName('td');
+        var studentId = cells[0].innerText.toLowerCase();
+
+        if (studentId.includes(input)) {
+          rows[i].style.display = '';
+        } else {
+          rows[i].style.display = 'none';
+        }
+      }
+    }
+
+    //display the table
+    function resetTable() {
+      var table = document.getElementById('tableBody');
+      var rows = table.getElementsByTagName('tr');
+
+      for (var i = 0; i < rows.length; i++) {
+        rows[i].style.display = '';
+      }
+    }
+    
     function toggleForm() {
         var form = document.getElementById("formContainer");
         form.style.display = (form.style.display === "none") ? "block" : "none";
