@@ -68,38 +68,32 @@ def logout(menu_window, student_id, login_time):
     # Record the logout time in the database when clicking the Logout button
     logout_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    try:
+    
         # Set a default timeout for socket operations (indirectly affects MySQL connection)
       #  socket.setdefaulttimeout(60)
 
-        db_connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="records"
-        )
+    db_connection = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="records"
+    )
 
-        cursor = db_connection.cursor()
+    cursor = db_connection.cursor()
 
-        update_query = "UPDATE login_sessions SET logout_time = %s WHERE studentid = %s AND login_time = %s"
-        cursor.execute(update_query, (logout_time, student_id, login_time))
+    update_query = "UPDATE login_sessions SET logout_time = %s WHERE studentid = %s AND login_time = %s"
+    cursor.execute(update_query, (logout_time, student_id, login_time))
 
-        # update_time = "UPDATE login_sessions SET consumed_time = TIMESTAMPDIFF(MINUTE, login_time, logout_time) WHERE studentid = %s AND login_time = %s"
-        # cursor.execute(update_time, (student_id, login_time))
+    # update_time = "UPDATE login_sessions SET consumed_time = TIMESTAMPDIFF(MINUTE, login_time, logout_time) WHERE studentid = %s AND login_time = %s"
+    # cursor.execute(update_time, (student_id, login_time))
 
-        db_connection.commit()
+    db_connection.commit()
 
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")
-        #Handle the error (e.g., display a message to the user)
-        messagebox.showerror("Database Connection Error", f"Error: {err}")
 
-        
-    finally:
-        cursor.close()
-        db_connection.close()
+    cursor.close()
+    db_connection.close()
 
-        menu_window.destroy()
+    menu_window.destroy()
 
 # Function to show the menu window
 def show_menu(student_id, login_time):
